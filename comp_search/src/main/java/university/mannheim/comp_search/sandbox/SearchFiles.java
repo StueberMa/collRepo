@@ -48,7 +48,7 @@ public class SearchFiles {
 		// ensure parameters set
 		if (args.length > 0
 				&& ("-h".equals(args[0]) || "-help".equals(args[0]))) {
-			System.out.println("Usage:\tjava org.apache.lucene.demo.SearchFiles [-index dir] [-field f] [-repeat n] [-queries file] [-query string] [-raw] [-paging hitsPerPage]\n\nSee http://lucene.apache.org/core/4_1_0/demo/ for details.");
+			System.out.println("Usage: java org.apache.lucene.demo.SearchFiles [-index dir] [-field f] [-repeat n] [-queries file] [-query string] [-raw] [-paging hitsPerPage]");
 			System.exit(0);
 		}
 		

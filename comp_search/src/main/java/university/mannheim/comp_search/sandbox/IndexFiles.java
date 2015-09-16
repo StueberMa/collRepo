@@ -63,11 +63,8 @@ public class IndexFiles {
 
 		// ensure docPath
 		if (docsPath == null) {
-			System.err
-					.println("Usage: java org.apache.lucene.demo.IndexFiles"
-							+ " [-index INDEX_PATH] [-docs DOCS_PATH] [-update]\n\n"
-							+ "This indexes the documents in DOCS_PATH, creating a Lucene index"
-							+ "in INDEX_PATH that can be searched with SearchFiles");
+			System.err.println("Usage: java org.apache.lucene.demo.IndexFiles "
+					+ "[-index INDEX_PATH] [-docs DOCS_PATH] [-update]");
 			System.exit(1);
 		}
 
@@ -152,7 +149,7 @@ public class IndexFiles {
 	/** Indexes a single document */
 	static void indexDoc(IndexWriter writer, Path file, long lastModified)
 			throws IOException {
-		
+
 		InputStream stream = Files.newInputStream(file);
 
 		// make a new, empty document
