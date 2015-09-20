@@ -1,12 +1,12 @@
-package university.mannheim.sandbox.sample_input;
+package university.mannheim.comp_search.sample;
 
 /**
- * Class Bus.
+ * Class Truck.
  * 
  * @author Maximilian Stüber
  * @version 20.09.2015
  */
-public class Bus implements Vehicle {
+public class Truck implements Vehicle{
 
 	// attributes
 	private int numOfSeats;
@@ -18,7 +18,7 @@ public class Bus implements Vehicle {
 	 * @param numOfSeats
 	 * @param numOfWheels
 	 */
-	public Bus(int numOfSeats, int numOfWheels) {
+	public Truck(int numOfSeats, int numOfWheels) {
 		this.numOfSeats = numOfSeats;
 		this.numOfWheels = numOfWheels;
 	}
@@ -44,6 +44,6 @@ public class Bus implements Vehicle {
 	 */
 	@Override
 	public String getVehicleType() {
-		return "Bus";
+		return "Truck";
 	}
 }
