@@ -30,7 +30,14 @@
 			<artifactId>lucene-analyzers-common</artifactId>
 			<version>${version.lucene}</version>
 		</dependency>
-		
+
+		<!-- ANTLR -->
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4</artifactId>
+			<version>4.5.1-1</version>
+		</dependency>
+
 		<!-- Loggings -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -43,4 +50,18 @@
 			<version>${version.slf4j}</version>
 		</dependency>
 	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

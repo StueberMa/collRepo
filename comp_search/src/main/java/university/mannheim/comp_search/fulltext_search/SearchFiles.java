@@ -1,4 +1,4 @@
-package university.mannheim.comp_search.sandbox;
+package university.mannheim.comp_search.fulltext_search;
 
 import java.io.BufferedReader;
 import java.io.IOException;
