@@ -19,6 +19,7 @@ hs_err_pid*
 .project
 /bin/
 /data/
+/index/
 /.git/
 /.metadata/
 /RemoteSystemsTempFiles/

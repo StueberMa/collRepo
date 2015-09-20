@@ -1,4 +1,4 @@
-package university.mannheim.comp_search.fulltext_index;
+package university.mannheim.comp_search.index;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

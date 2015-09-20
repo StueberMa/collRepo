@@ -1,4 +1,4 @@
-package university.mannheim.comp_search.fulltext_index;
+package university.mannheim.sandbox;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,12 +28,12 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 /**
- * Index single text file.
+ * Index all text files under a directory..
  * 
  * @author Maximilian Stüber
- * @version 20.09.2015
+ * @version 16.09.2015
  */
-public class IndexFileTask {
+public class IndexFile {
 
 	/**
 	 * Main Method

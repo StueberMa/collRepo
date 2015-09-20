@@ -1,4 +1,4 @@
-package university.mannheim.comp_search.sample_input;
+package university.mannheim.sandbox.sample_input;
 
 import java.util.ArrayList;
 import java.util.List;
