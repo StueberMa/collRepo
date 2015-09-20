@@ -1,6 +1,8 @@
 package university.mannheim.comp_search.index;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +28,8 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Index single text file.
@@ -33,7 +37,63 @@ import org.apache.lucene.store.FSDirectory;
  * @author Maximilian Stüber
  * @version 20.09.2015
  */
-public class IndexFileTask {
+public class IndexFileTask implements Runnable {
+	
+	// attributes
+	private File file;
+	private IndexWriter writer;
+	
+	// constants
+	private static final Logger LOGGER = LoggerFactory.getLogger(IndexFileTask.class.getSimpleName());
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 * @param writer
+	 */
+	public IndexFileTask(File file, IndexWriter writer) {
+		this.file = file;
+		this.writer = writer;
+	}
+	
+	/**
+	 * Method run
+	 */
+	@Override
+	public void run() {
+		
+		// declaration
+		Document doc = null;
+		InputStream stream  = null;
+		
+		// initialize
+		doc = new Document();
+		
+		// print start message
+		LOGGER.info("Start processing (" + file.getName() + ")");
+		
+		// add name to index 
+		Field pathField = new StringField("path", file.getAbsolutePath(),
+				Field.Store.YES);
+		doc.add(pathField);
+		
+		// add actual content
+		try {
+			stream = new FileInputStream(file);
+			
+			doc.add(new TextField("content", new BufferedReader(
+					new InputStreamReader(stream, StandardCharsets.UTF_8))));
+			
+			writer.addDocument(doc);
+		} catch (IOException e) {
+			LOGGER.error("Internal Error: File not found");
+			return;
+		}
+		
+		// print complete message
+		LOGGER.info("Finished processing (" + file.getName() + ")");
+	}
 
 	/**
 	 * Main Method

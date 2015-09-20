@@ -38,6 +38,18 @@
 			<version>4.5.1-1</version>
 		</dependency>
 
+		<!-- Apache Commons -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
 		<!-- Loggings -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -50,7 +62,7 @@
 			<version>${version.slf4j}</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
