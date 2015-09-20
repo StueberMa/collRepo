@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -27,6 +28,7 @@ public class FileCrawler {
 
 	// constants
 	private static final int WORKERPOOL_SIZE = 10;
+	private static final int TIMEOUT_IN_MINUTES = 999;
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileCrawler.class.getSimpleName());
 	private static final String INPUT_PATH = System.getProperty("user.dir") + "/../data";
 	private static final String INDEX_PATH = System.getProperty("user.dir") + "/../index";
@@ -58,7 +60,7 @@ public class FileCrawler {
 
 		iwc = new IndexWriterConfig(analyzer);
 		iwc.setOpenMode(OpenMode.CREATE);
-
+		
 		writer = new IndexWriter(dir, iwc);
 
 		// get files from directory
@@ -82,7 +84,8 @@ public class FileCrawler {
 		}
 
 		// terminate
-		writer.close();
 		executor.shutdown();
+		executor.awaitTermination(TIMEOUT_IN_MINUTES, TimeUnit.MINUTES);
+		writer.close();
 	}
 }
