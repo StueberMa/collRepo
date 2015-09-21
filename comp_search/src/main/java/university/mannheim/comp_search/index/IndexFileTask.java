@@ -1,16 +1,23 @@
 package university.mannheim.comp_search.index;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.IOException;
 
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import university.mannheim.comp_search.JavaLexer;
+import university.mannheim.comp_search.JavaParser;
 
 /**
  * Index single text file.
@@ -25,7 +32,8 @@ public class IndexFileTask implements Runnable {
 	private IndexWriter writer;
 
 	// constants
-	private static final Logger LOGGER = LoggerFactory.getLogger(IndexFileTask.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(IndexFileTask.class.getSimpleName());
 
 	/**
 	 * Constructor
@@ -48,7 +56,6 @@ public class IndexFileTask implements Runnable {
 		Document doc = null;
 		Field nameField = null;
 		Field typeField = null;
-		Field textField = null;
 
 		// initialize
 		doc = new Document();
@@ -58,16 +65,17 @@ public class IndexFileTask implements Runnable {
 
 		try {
 			// add name
-			nameField = new StringField("file_name", file.getName(), Field.Store.YES);
+			nameField = new StringField("file_name", file.getName(),
+					Field.Store.YES);
 			doc.add(nameField);
-			
+
 			// add type
-			typeField = new StringField("file_type", FilenameUtils.getExtension(file.getName()), Field.Store.YES);
+			typeField = new StringField("file_type",
+					FilenameUtils.getExtension(file.getName()), Field.Store.YES);
 			doc.add(typeField);
-			
-			// add (actual) content
-			textField = new TextField("content", new FileReader(file));
-			doc.add(textField);
+
+			// add actual content
+			parseContent(file, doc);
 
 			// add document
 			writer.addDocument(doc);
@@ -78,5 +86,31 @@ public class IndexFileTask implements Runnable {
 
 		// print complete message
 		LOGGER.info("Finished processing (" + file.getName() + ")");
+	}
+
+	/**
+	 * Method parseContent
+	 * 
+	 * @param file
+	 * @param doc
+	 */
+	private void parseContent(File file, Document doc) {
+
+		// declaration
+		JavaParser parser = null;
+		ParseTree tree = null;
+		ParseTreeWalker walker = null;
+		
+		try {
+			parser = new JavaParser(new CommonTokenStream(new JavaLexer(new ANTLRInputStream(new FileInputStream(file)))));
+			tree = parser.compilationUnit();
+			walker = new ParseTreeWalker();
+
+			JavaFileListener extractor = new JavaFileListener(parser, doc);
+			walker.walk(extractor, tree);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 }
