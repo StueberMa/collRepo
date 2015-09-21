@@ -8,8 +8,11 @@ import university.mannheim.comp_search.JavaBaseListener;
 import university.mannheim.comp_search.JavaParser;
 import university.mannheim.comp_search.JavaParser.ClassOrInterfaceModifierContext;
 import university.mannheim.comp_search.JavaParser.FormalParametersContext;
+import university.mannheim.comp_search.JavaParser.ImportDeclarationContext;
 import university.mannheim.comp_search.JavaParser.InterfaceDeclarationContext;
 import university.mannheim.comp_search.JavaParser.InterfaceMethodDeclarationContext;
+import university.mannheim.comp_search.JavaParser.PackageDeclarationContext;
+import university.mannheim.comp_search.JavaParser.QualifiedNameContext;
 import university.mannheim.comp_search.JavaParser.TypeContext;
 import university.mannheim.comp_search.JavaParser.TypeListContext;
 
@@ -42,29 +45,48 @@ public class JavaFileListener extends JavaBaseListener {
 	 */
 	@Override
 	public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
-		
+
 		// declaration
 		String content = "";
-		
+
 		// consider: modifier
-		content = parser.getTokenStream().getText(ctx.getParent().getRuleContext(ClassOrInterfaceModifierContext.class, 0));
-		
+		content = parser.getTokenStream().getText(
+				ctx.getParent().getRuleContext(ClassOrInterfaceModifierContext.class, 0));
+
 		// consider: identifier
 		content = content + " class " + ctx.getToken(JavaParser.Identifier, 0).getText();
-		
+
 		// consider: extends statement
-		if(ctx.getToken(JavaParser.EXTENDS, 0) != null )
+		if (ctx.getToken(JavaParser.EXTENDS, 0) != null)
 			content = content + " extends " + ctx.getRuleContext(TypeContext.class, 0).getText();
-		
+
 		// consider: implements statement
-		if(ctx.getToken(JavaParser.IMPLEMENTS, 0) != null ) {
+		if (ctx.getToken(JavaParser.IMPLEMENTS, 0) != null) {
 			content = content + " implements";
-			
-			for(TypeContext type : ctx.getRuleContext(TypeListContext.class, 0).getRuleContexts(TypeContext.class)) {
-				content = content + " " + type.getText();	
+
+			for (TypeContext type : ctx.getRuleContext(TypeListContext.class, 0).getRuleContexts(TypeContext.class)) {
+				content = content + " " + type.getText();
 			}
 		}
-		
+
+		// add to doc.
+		addContent(content);
+	}
+
+	/**
+	 * Method enterImportDeclaration
+	 * 
+	 * @param ctx
+	 */
+	@Override
+	public void enterImportDeclaration(ImportDeclarationContext ctx) {
+
+		// declaration
+		String content = "";
+
+		// consider: import
+		content = "import " + ctx.getRuleContext(QualifiedNameContext.class, 0).getText();
+
 		// add to doc.
 		addContent(content);
 	}
@@ -79,18 +101,48 @@ public class JavaFileListener extends JavaBaseListener {
 
 		// declaration
 		String content = "";
-		
+
 		// consider: modifier
-		content = parser.getTokenStream().getText(ctx.getParent().getRuleContext(ClassOrInterfaceModifierContext.class, 0));;
-		
+		content = parser.getTokenStream().getText(
+				ctx.getParent().getRuleContext(ClassOrInterfaceModifierContext.class, 0));
+		;
+
 		// consider: identifier
 		content = content + " interface " + ctx.getToken(JavaParser.Identifier, 0).getText();
 
 		// consider: extends statement
-		if(ctx.getToken(JavaParser.EXTENDS, 0) != null ) {
+		if (ctx.getToken(JavaParser.EXTENDS, 0) != null) {
 			content = content + " extends " + ctx.getRuleContext(TypeContext.class, 0).getText();
 		}
-		
+
+		// add to doc.
+		addContent(content);
+	}
+
+	/**
+	 * Method enterMethodDeclaration
+	 * 
+	 * @param ctx
+	 */
+	@Override
+	public void enterInterfaceMethodDeclaration(InterfaceMethodDeclarationContext ctx) {
+
+		// declaration
+		String content = "";
+
+		// consider: type
+		content = "void";
+
+		if (ctx.getRuleContext(TypeContext.class, 0) != null) {
+			content = ctx.getRuleContext(TypeContext.class, 0).getText();
+		}
+
+		// consider: identifier
+		content = content + " " + ctx.getToken(JavaParser.Identifier, 0);
+
+		// consider: params
+		content = content + ctx.getRuleContext(FormalParametersContext.class, 0).getText();
+
 		// add to doc.
 		addContent(content);
 	}
@@ -106,16 +158,16 @@ public class JavaFileListener extends JavaBaseListener {
 		// declaration
 		String content = "";
 
-		// consider: type
+		// consaider: type
 		content = "void";
-		
-		if (ctx.getRuleContext(TypeContext.class,0) != null) {
+
+		if (ctx.getRuleContext(TypeContext.class, 0) != null) {
 			content = ctx.getRuleContext(TypeContext.class, 0).getText();
 		}
 		
 		// consider: identifier
 		content = content + " " + ctx.getToken(JavaParser.Identifier, 0);
-		
+
 		// consider: params
 		content = content + ctx.getRuleContext(FormalParametersContext.class, 0).getText();
 
@@ -124,28 +176,22 @@ public class JavaFileListener extends JavaBaseListener {
 	}
 
 	/**
-	 * Method enterMethodDeclaration
+	 * Method enterPackageDeclaration
 	 * 
 	 * @param ctx
 	 */
 	@Override
-	public void enterInterfaceMethodDeclaration(InterfaceMethodDeclarationContext ctx) {
-		
+	public void enterPackageDeclaration(PackageDeclarationContext ctx) {
+
 		// declaration
 		String content = "";
 
-		// consider: type
-		content = "void";
-		
-		if (ctx.getRuleContext(TypeContext.class,0) != null) {
-			content = ctx.getRuleContext(TypeContext.class, 0).getText();
-		}
-		
-		// consider: identifier
-		content = content + " " + ctx.getToken(JavaParser.Identifier, 0);
-		
-		// consider: params
-		content = content + ctx.getRuleContext(FormalParametersContext.class, 0).getText();
+		// ensure: package declaration
+		if (ctx.getRuleContext(QualifiedNameContext.class, 0) == null)
+			return;
+
+		// consider: package
+		content = "package " + ctx.getRuleContext(QualifiedNameContext.class, 0).getText();
 
 		// add to doc.
 		addContent(content);
