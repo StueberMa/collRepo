@@ -10,6 +10,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.lucene>5.3.0</version.lucene>
+		<version.antlr>4.5.1-1</version.antlr>
 		<version.slf4j>1.7.12</version.slf4j>
 	</properties>
 
@@ -34,8 +35,8 @@
 		<!-- ANTLR -->
 		<dependency>
 			<groupId>org.antlr</groupId>
-			<artifactId>antlr4</artifactId>
-			<version>4.5.1-1</version>
+			<artifactId>antlr4-runtime</artifactId>
+			<version>${version.antlr}</version>
 		</dependency>
 
 		<!-- Apache Commons -->
@@ -73,6 +74,19 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-maven-plugin</artifactId>
+				<version>${version.antlr}</version>
+				<executions>
+					<execution>
+						<id>antlr</id>
+						<goals>
+							<goal>antlr4</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

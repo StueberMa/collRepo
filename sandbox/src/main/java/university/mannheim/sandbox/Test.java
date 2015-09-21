@@ -23,5 +23,6 @@ public class Test {
 		
 		// output
 		System.out.println(dir);
+		Java8BaseListener test = null;
 	}
 }
