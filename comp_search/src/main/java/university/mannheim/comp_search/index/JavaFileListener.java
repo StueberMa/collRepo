@@ -8,7 +8,10 @@ import org.apache.lucene.document.TextField;
 
 import university.mannheim.comp_search.JavaBaseListener;
 import university.mannheim.comp_search.JavaParser;
+import university.mannheim.comp_search.JavaParser.FormalParametersContext;
 import university.mannheim.comp_search.JavaParser.InterfaceDeclarationContext;
+import university.mannheim.comp_search.JavaParser.InterfaceMethodDeclarationContext;
+import university.mannheim.comp_search.JavaParser.TypeContext;
 
 /**
  * Listener for parsed java files.
@@ -71,13 +74,40 @@ public class JavaFileListener extends JavaBaseListener {
 
 		// get type AND args.
 		if (ctx.type() != null) {
-			type = tokens.getText(ctx.type());
+			type = tokens.getText(ctx.getRuleContext(TypeContext.class, 0));
 		}
 
-		args = tokens.getText(ctx.formalParameters());
+		args = tokens.getText(ctx.getRuleContext(FormalParametersContext.class, 0));
 
 		// add to doc.
-		addContent(type + " " + ctx.Identifier() + args);
+		addContent(type + " " + ctx.getToken(JavaParser.Identifier, 0) + args);
+	}
+
+	/**
+	 * Method enterMethodDeclaration
+	 * 
+	 * @param ctx
+	 */
+	@Override
+	public void enterInterfaceMethodDeclaration(InterfaceMethodDeclarationContext ctx) {
+		// declration
+		TokenStream tokens = null;
+		String type = "";
+		String args = "";
+
+		// initialization
+		type = "void";
+		tokens = parser.getTokenStream();
+
+		// get type AND args.
+		if (ctx.type() != null) {
+			type = tokens.getText(ctx.getRuleContext(TypeContext.class, 0));
+		}
+
+		args = tokens.getText(ctx.getRuleContext(FormalParametersContext.class, 0));
+
+		// add to doc.
+		addContent(type + " " + ctx.getToken(JavaParser.Identifier, 0) + args);
 	}
 
 	/**
