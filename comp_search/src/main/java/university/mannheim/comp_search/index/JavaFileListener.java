@@ -11,6 +11,7 @@ import university.mannheim.comp_search.JavaParser.FormalParametersContext;
 import university.mannheim.comp_search.JavaParser.InterfaceDeclarationContext;
 import university.mannheim.comp_search.JavaParser.InterfaceMethodDeclarationContext;
 import university.mannheim.comp_search.JavaParser.TypeContext;
+import university.mannheim.comp_search.JavaParser.TypeListContext;
 
 /**
  * Listener for parsed java files.
@@ -44,7 +45,6 @@ public class JavaFileListener extends JavaBaseListener {
 		
 		// declaration
 		String content = "";
-		int offset = 0;
 		
 		// consider: modifier
 		content = parser.getTokenStream().getText(ctx.getParent().getRuleContext(ClassOrInterfaceModifierContext.class, 0));
@@ -53,14 +53,16 @@ public class JavaFileListener extends JavaBaseListener {
 		content = content + " class " + ctx.getToken(JavaParser.Identifier, 0).getText();
 		
 		// consider: extends statement
-		if(ctx.getToken(JavaParser.EXTENDS, 0) != null ) {
-			content = content + " extends " + parser.getTokenStream().getText(ctx.getRuleContext(TypeContext.class, 0));
-			offset = 1;
-		}
+		if(ctx.getToken(JavaParser.EXTENDS, 0) != null )
+			content = content + " extends " + ctx.getRuleContext(TypeContext.class, 0).getText();
 		
 		// consider: implements statement
 		if(ctx.getToken(JavaParser.IMPLEMENTS, 0) != null ) {
-			content = content + " implements " + parser.getTokenStream().getText(ctx.getRuleContext(TypeContext.class, offset));	
+			content = content + " implements";
+			
+			for(TypeContext type : ctx.getRuleContext(TypeListContext.class, 0).getRuleContexts(TypeContext.class)) {
+				content = content + " " + type.getText();	
+			}
 		}
 		
 		// add to doc.
@@ -82,11 +84,11 @@ public class JavaFileListener extends JavaBaseListener {
 		content = parser.getTokenStream().getText(ctx.getParent().getRuleContext(ClassOrInterfaceModifierContext.class, 0));;
 		
 		// consider: identifier
-		content += content + " interface " + ctx.getToken(JavaParser.Identifier, 0).getText();
+		content = content + " interface " + ctx.getToken(JavaParser.Identifier, 0).getText();
 
 		// consider: extends statement
 		if(ctx.getToken(JavaParser.EXTENDS, 0) != null ) {
-			content = content + " extends " + parser.getTokenStream().getText(ctx.getRuleContext(TypeContext.class, 0));
+			content = content + " extends " + ctx.getRuleContext(TypeContext.class, 0).getText();
 		}
 		
 		// add to doc.

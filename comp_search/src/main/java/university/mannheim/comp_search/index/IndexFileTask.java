@@ -103,11 +103,14 @@ public class IndexFileTask implements Runnable {
 					 	new JavaLexer(new ANTLRInputStream(new FileInputStream(file)))));
 			tree = parser.compilationUnit();
 			walker = new ParseTreeWalker();
+			
+			// debug: print tree
+			//System.out.println(tree.toStringTree(parser));
+			
+			// process tree
 			JavaFileListener extractor = new JavaFileListener(parser, doc);
 			walker.walk(extractor, tree);
 			
-			// print tree
-			// System.out.println(tree.toStringTree(parser));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
