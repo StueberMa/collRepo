@@ -1,12 +1,18 @@
 package university.mannheim.comp_search.index;
 
+import java.util.List;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.TextField;
 
+import university.mannheim.comp_search.JavaParser.VariableDeclaratorIdContext;
 import university.mannheim.comp_search.JavaBaseListener;
 import university.mannheim.comp_search.JavaParser;
 import university.mannheim.comp_search.JavaParser.ClassOrInterfaceModifierContext;
+import university.mannheim.comp_search.JavaParser.ConstructorDeclarationContext;
+import university.mannheim.comp_search.JavaParser.FormalParameterContext;
+import university.mannheim.comp_search.JavaParser.FormalParameterListContext;
 import university.mannheim.comp_search.JavaParser.FormalParametersContext;
 import university.mannheim.comp_search.JavaParser.ImportDeclarationContext;
 import university.mannheim.comp_search.JavaParser.InterfaceDeclarationContext;
@@ -74,6 +80,42 @@ public class JavaFileListener extends JavaBaseListener {
 	}
 
 	/**
+	 * Method enterConstructorDeclaration
+	 * 
+	 * @param ctx
+	 */
+	@Override
+	public void enterConstructorDeclaration(ConstructorDeclarationContext ctx) {
+
+		// declaration
+		List<FormalParameterContext> params = null;
+		String content = "";
+
+		// consider: identifier
+		content = ctx.getToken(JavaParser.Identifier, 0).getText();
+
+		// consider: params
+		content = content + "(";
+
+		if (ctx.getRuleContext(FormalParametersContext.class, 0).getRuleContext(FormalParameterListContext.class, 0) != null) {
+			params = ctx.getRuleContext(FormalParametersContext.class, 0)
+					.getRuleContext(FormalParameterListContext.class, 0).getRuleContexts(FormalParameterContext.class);
+
+			for (FormalParameterContext param : params) {
+				content = content + param.getRuleContext(TypeContext.class, 0).getText() + " "
+						+ param.getRuleContext(VariableDeclaratorIdContext.class, 0).getText() + ", ";
+			}
+			
+			content = content.substring(0, content.length() - 2);
+		}
+
+		content = content + ")";
+
+		// add to doc.
+		addContent(content);
+	}
+
+	/**
 	 * Method enterImportDeclaration
 	 * 
 	 * @param ctx
@@ -105,7 +147,6 @@ public class JavaFileListener extends JavaBaseListener {
 		// consider: modifier
 		content = parser.getTokenStream().getText(
 				ctx.getParent().getRuleContext(ClassOrInterfaceModifierContext.class, 0));
-		;
 
 		// consider: identifier
 		content = content + " interface " + ctx.getToken(JavaParser.Identifier, 0).getText();
@@ -128,6 +169,7 @@ public class JavaFileListener extends JavaBaseListener {
 	public void enterInterfaceMethodDeclaration(InterfaceMethodDeclarationContext ctx) {
 
 		// declaration
+		List<FormalParameterContext> params = null;
 		String content = "";
 
 		// consider: type
@@ -141,7 +183,21 @@ public class JavaFileListener extends JavaBaseListener {
 		content = content + " " + ctx.getToken(JavaParser.Identifier, 0);
 
 		// consider: params
-		content = content + ctx.getRuleContext(FormalParametersContext.class, 0).getText();
+		content = content + "(";
+
+		if (ctx.getRuleContext(FormalParametersContext.class, 0).getRuleContext(FormalParameterListContext.class, 0) != null) {
+			params = ctx.getRuleContext(FormalParametersContext.class, 0)
+					.getRuleContext(FormalParameterListContext.class, 0).getRuleContexts(FormalParameterContext.class);
+
+			for (FormalParameterContext param : params) {
+				content = content + param.getRuleContext(TypeContext.class, 0).getText() + " "
+						+ param.getRuleContext(VariableDeclaratorIdContext.class, 0).getText() + ", ";
+			}
+			
+			content = content.substring(0, content.length() - 2);
+		} 
+
+		content = content + ")";
 
 		// add to doc.
 		addContent(content);
@@ -156,6 +212,7 @@ public class JavaFileListener extends JavaBaseListener {
 	public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
 
 		// declaration
+		List<FormalParameterContext> params = null;
 		String content = "";
 
 		// consaider: type
@@ -164,12 +221,26 @@ public class JavaFileListener extends JavaBaseListener {
 		if (ctx.getRuleContext(TypeContext.class, 0) != null) {
 			content = ctx.getRuleContext(TypeContext.class, 0).getText();
 		}
-		
+
 		// consider: identifier
 		content = content + " " + ctx.getToken(JavaParser.Identifier, 0);
 
 		// consider: params
-		content = content + ctx.getRuleContext(FormalParametersContext.class, 0).getText();
+		content = content + "(";
+
+		if (ctx.getRuleContext(FormalParametersContext.class, 0).getRuleContext(FormalParameterListContext.class, 0) != null) {
+			params = ctx.getRuleContext(FormalParametersContext.class, 0)
+					.getRuleContext(FormalParameterListContext.class, 0).getRuleContexts(FormalParameterContext.class);
+
+			for (FormalParameterContext param : params) {
+				content = content + param.getRuleContext(TypeContext.class, 0).getText() + " "
+						+ param.getRuleContext(VariableDeclaratorIdContext.class, 0).getText() + ", ";
+			}
+			
+			content = content.substring(0, content.length() - 2);
+		}
+
+		content = content + ")";
 
 		// add to doc.
 		addContent(content);
