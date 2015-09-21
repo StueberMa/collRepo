@@ -60,7 +60,7 @@ public class FileCrawler {
 
 		iwc = new IndexWriterConfig(analyzer);
 		iwc.setOpenMode(OpenMode.CREATE);
-		
+
 		writer = new IndexWriter(dir, iwc);
 
 		// get files from directory

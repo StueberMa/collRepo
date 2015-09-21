@@ -45,9 +45,9 @@ public class SearchFiles {
 		TopDocs results = null;
 		ScoreDoc[] hits = null;
 		Document doc = null;
-		
+
 		String queryString = null;
-		
+
 		// initalize index
 		System.out.println("**** Application start up ****");
 		reader = DirectoryReader.open(FSDirectory.open(Paths.get(INDEX_PATH)));
@@ -58,21 +58,21 @@ public class SearchFiles {
 		in = new BufferedReader(new InputStreamReader(System.in));
 
 		while (true) {
-			
-			//get user input
+
+			// get user input
 			System.out.println("\nEnter query (ENTER for exit):");
 			queryString = in.readLine();
-			
+
 			// exit if no input
 			if (queryString == null || queryString.equals("")) {
 				System.out.println("**** Application terminated ****");
 				break;
 			}
-			
+
 			// parse query
 			query = parser.parse(queryString);
 			System.out.println("\nSearching for: " + query.toString(SEARCH_FIELD));
-			
+
 			// search for results
 			searcher.search(query, NUM_RESULTS);
 			results = searcher.search(query, NUM_RESULTS);
@@ -86,7 +86,7 @@ public class SearchFiles {
 				System.out.println((i + 1) + ". " + doc.get("file_name"));
 			}
 		}
-		
+
 		// close
 		reader.close();
 	}

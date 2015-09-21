@@ -32,8 +32,7 @@ public class IndexFileTask implements Runnable {
 	private IndexWriter writer;
 
 	// constants
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(IndexFileTask.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(IndexFileTask.class.getSimpleName());
 
 	/**
 	 * Constructor
@@ -65,13 +64,11 @@ public class IndexFileTask implements Runnable {
 
 		try {
 			// add name
-			nameField = new StringField("file_name", file.getName(),
-					Field.Store.YES);
+			nameField = new StringField("file_name", file.getName(), Field.Store.YES);
 			doc.add(nameField);
 
 			// add type
-			typeField = new StringField("file_type",
-					FilenameUtils.getExtension(file.getName()), Field.Store.YES);
+			typeField = new StringField("file_type", FilenameUtils.getExtension(file.getName()), Field.Store.YES);
 			doc.add(typeField);
 
 			// add actual content
@@ -100,9 +97,10 @@ public class IndexFileTask implements Runnable {
 		JavaParser parser = null;
 		ParseTree tree = null;
 		ParseTreeWalker walker = null;
-		
+
 		try {
-			parser = new JavaParser(new CommonTokenStream(new JavaLexer(new ANTLRInputStream(new FileInputStream(file)))));
+			parser = new JavaParser(new CommonTokenStream(
+					new JavaLexer(new ANTLRInputStream(new FileInputStream(file)))));
 			tree = parser.compilationUnit();
 			walker = new ParseTreeWalker();
 
