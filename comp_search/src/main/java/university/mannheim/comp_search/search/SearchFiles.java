@@ -83,7 +83,7 @@ public class SearchFiles {
 
 			for (int i = 0; i < hits.length; i++) {
 				doc = searcher.doc(hits[i].doc);
-				System.out.println((i + 1) + ". " + doc.get("path"));
+				System.out.println((i + 1) + ". " + doc.get("file_name"));
 			}
 		}
 		

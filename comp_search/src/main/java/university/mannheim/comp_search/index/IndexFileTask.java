@@ -3,6 +3,7 @@ package university.mannheim.comp_search.index;
 import java.io.File;
 import java.io.FileReader;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -45,7 +46,8 @@ public class IndexFileTask implements Runnable {
 
 		// declaration
 		Document doc = null;
-		Field pathField = null;
+		Field nameField = null;
+		Field typeField = null;
 		Field textField = null;
 
 		// initialize
@@ -56,10 +58,14 @@ public class IndexFileTask implements Runnable {
 
 		try {
 			// add name
-			pathField = new StringField("path", file.getName(), Field.Store.YES);
-			doc.add(pathField);
-
-			// add actual content
+			nameField = new StringField("file_name", file.getName(), Field.Store.YES);
+			doc.add(nameField);
+			
+			// add type
+			typeField = new StringField("file_type", FilenameUtils.getExtension(file.getName()), Field.Store.YES);
+			doc.add(typeField);
+			
+			// add (actual) content
 			textField = new TextField("content", new FileReader(file));
 			doc.add(textField);
 
