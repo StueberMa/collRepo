@@ -1,13 +1,12 @@
 package university.mannheim.comp_search.index;
 
-import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.misc.Interval;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.TextField;
 
 import university.mannheim.comp_search.JavaBaseListener;
 import university.mannheim.comp_search.JavaParser;
+import university.mannheim.comp_search.JavaParser.ClassOrInterfaceModifierContext;
 import university.mannheim.comp_search.JavaParser.FormalParametersContext;
 import university.mannheim.comp_search.JavaParser.InterfaceDeclarationContext;
 import university.mannheim.comp_search.JavaParser.InterfaceMethodDeclarationContext;
@@ -42,7 +41,30 @@ public class JavaFileListener extends JavaBaseListener {
 	 */
 	@Override
 	public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
-		addContent("class " + ctx.getToken(JavaParser.Identifier, 0).getText());
+		
+		// declaration
+		String content = "";
+		int offset = 0;
+		
+		// consider: modifier
+		content = parser.getTokenStream().getText(ctx.getParent().getRuleContext(ClassOrInterfaceModifierContext.class, 0));
+		
+		// consider: identifier
+		content = content + " class " + ctx.getToken(JavaParser.Identifier, 0).getText();
+		
+		// consider: extends statement
+		if(ctx.getToken(JavaParser.EXTENDS, 0) != null ) {
+			content = content + " extends " + parser.getTokenStream().getText(ctx.getRuleContext(TypeContext.class, 0));
+			offset = 1;
+		}
+		
+		// consider: implements statement
+		if(ctx.getToken(JavaParser.IMPLEMENTS, 0) != null ) {
+			content = content + " implements " + parser.getTokenStream().getText(ctx.getRuleContext(TypeContext.class, offset));	
+		}
+		
+		// add to doc.
+		addContent(content);
 	}
 
 	/**
@@ -52,7 +74,23 @@ public class JavaFileListener extends JavaBaseListener {
 	 */
 	@Override
 	public void enterInterfaceDeclaration(InterfaceDeclarationContext ctx) {
-		addContent("Interface " + ctx.Identifier().getText());
+
+		// declaration
+		String content = "";
+		
+		// consider: modifier
+		content = parser.getTokenStream().getText(ctx.getParent().getRuleContext(ClassOrInterfaceModifierContext.class, 0));;
+		
+		// consider: identifier
+		content += content + " interface " + ctx.getToken(JavaParser.Identifier, 0).getText();
+
+		// consider: extends statement
+		if(ctx.getToken(JavaParser.EXTENDS, 0) != null ) {
+			content = content + " extends " + parser.getTokenStream().getText(ctx.getRuleContext(TypeContext.class, 0));
+		}
+		
+		// add to doc.
+		addContent(content);
 	}
 
 	/**
@@ -63,24 +101,24 @@ public class JavaFileListener extends JavaBaseListener {
 	@Override
 	public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
 
-		// declration
-		TokenStream tokens = null;
-		String type = "";
-		String args = "";
+		// declaration
+		String content = "";
 
-		// initialization
-		type = "void";
-		tokens = parser.getTokenStream();
-
-		// get type AND args.
-		if (ctx.type() != null) {
-			type = tokens.getText(ctx.getRuleContext(TypeContext.class, 0));
+		// consider: type
+		content = "void";
+		
+		if (ctx.getRuleContext(TypeContext.class,0) != null) {
+			content = ctx.getRuleContext(TypeContext.class, 0).getText();
 		}
-
-		args = tokens.getText(ctx.getRuleContext(FormalParametersContext.class, 0));
+		
+		// consider: identifier
+		content = content + " " + ctx.getToken(JavaParser.Identifier, 0);
+		
+		// consider: params
+		content = content + ctx.getRuleContext(FormalParametersContext.class, 0).getText();
 
 		// add to doc.
-		addContent(type + " " + ctx.getToken(JavaParser.Identifier, 0) + args);
+		addContent(content);
 	}
 
 	/**
@@ -90,48 +128,25 @@ public class JavaFileListener extends JavaBaseListener {
 	 */
 	@Override
 	public void enterInterfaceMethodDeclaration(InterfaceMethodDeclarationContext ctx) {
-		// declration
-		TokenStream tokens = null;
-		String type = "";
-		String args = "";
+		
+		// declaration
+		String content = "";
 
-		// initialization
-		type = "void";
-		tokens = parser.getTokenStream();
-
-		// get type AND args.
-		if (ctx.type() != null) {
-			type = tokens.getText(ctx.getRuleContext(TypeContext.class, 0));
+		// consider: type
+		content = "void";
+		
+		if (ctx.getRuleContext(TypeContext.class,0) != null) {
+			content = ctx.getRuleContext(TypeContext.class, 0).getText();
 		}
-
-		args = tokens.getText(ctx.getRuleContext(FormalParametersContext.class, 0));
+		
+		// consider: identifier
+		content = content + " " + ctx.getToken(JavaParser.Identifier, 0);
+		
+		// consider: params
+		content = content + ctx.getRuleContext(FormalParametersContext.class, 0).getText();
 
 		// add to doc.
-		addContent(type + " " + ctx.getToken(JavaParser.Identifier, 0) + args);
-	}
-
-	/**
-	 * Method addContent
-	 * 
-	 * @param stream
-	 * @param interval
-	 */
-	@SuppressWarnings("unused")
-	private void addContent(TokenStream stream, Interval interval) {
-
-		// declaration
-		TextField textField = null;
-		String text = "";
-
-		// conncatenate text
-		for (int i = interval.a; i < interval.b; i++) {
-			text = text + " " + stream.get(i).getText();
-		}
-		text.trim();
-
-		// add (actual) content
-		textField = new TextField("content", text, Store.NO);
-		doc.add(textField);
+		addContent(content);
 	}
 
 	/**

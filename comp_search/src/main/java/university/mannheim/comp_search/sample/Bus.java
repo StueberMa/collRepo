@@ -6,7 +6,7 @@ package university.mannheim.comp_search.sample;
  * @author Maximilian Stüber
  * @version 20.09.2015
  */
-public class Bus implements Vehicle {
+public class Bus extends Object implements Vehicle{
 
 	// attributes
 	private int numOfSeats;

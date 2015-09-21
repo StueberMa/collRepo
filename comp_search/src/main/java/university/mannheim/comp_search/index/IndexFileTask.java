@@ -100,15 +100,16 @@ public class IndexFileTask implements Runnable {
 
 		try {
 			parser = new JavaParser(new CommonTokenStream(
-					new JavaLexer(new ANTLRInputStream(new FileInputStream(file)))));
+					 	new JavaLexer(new ANTLRInputStream(new FileInputStream(file)))));
 			tree = parser.compilationUnit();
 			walker = new ParseTreeWalker();
-
 			JavaFileListener extractor = new JavaFileListener(parser, doc);
 			walker.walk(extractor, tree);
+			
+			// print tree
+			// System.out.println(tree.toStringTree(parser));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 }
