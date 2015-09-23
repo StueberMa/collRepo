@@ -45,12 +45,10 @@ public class FileCrawler {
 		// declaration
 		File directory = null;
 		File[] allFiles = null;
-
 		Directory dir = null;
 		Analyzer analyzer = null;
 		IndexWriterConfig iwc = null;
 		IndexWriter writer = null;
-
 		ExecutorService executor = null;
 		Runnable task = null;
 

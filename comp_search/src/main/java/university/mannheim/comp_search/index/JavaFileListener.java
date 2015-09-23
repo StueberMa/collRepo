@@ -279,7 +279,7 @@ public class JavaFileListener extends JavaBaseListener {
 		TextField textField = null;
 
 		// add (actual) content
-		textField = new TextField("content", text, Store.NO);
+		textField = new TextField("file_content", text, Store.NO);
 		doc.add(textField);
 	}
 }
