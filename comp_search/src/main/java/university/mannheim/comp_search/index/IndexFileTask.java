@@ -52,6 +52,9 @@ public class IndexFileTask implements Runnable {
 	public void run() {
 
 		// declaration
+		JavaParser parser = null;
+		ParseTree tree = null;
+		ParseTreeWalker walker = null;
 		Document doc = null;
 		Field nameField = null;
 		Field typeField = null;
@@ -72,10 +75,25 @@ public class IndexFileTask implements Runnable {
 			doc.add(typeField);
 
 			// add actual content
-			parseContent(file, doc);
+			try {
+				parser = new JavaParser(new CommonTokenStream(
+						 	new JavaLexer(new ANTLRInputStream(new FileInputStream(file)))));
+				tree = parser.compilationUnit();
+				walker = new ParseTreeWalker();
+				
+				// debug: print tree
+				// System.out.println(tree.toStringTree(parser));
+				
+				// process tree
+				JavaFileListener extractor = new JavaFileListener(parser, doc);
+				walker.walk(extractor, tree);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 			// add document
 			writer.addDocument(doc);
+			
 		} catch (Exception e) {
 			LOGGER.error("Internal Error: I/O issue");
 			return;
@@ -83,36 +101,5 @@ public class IndexFileTask implements Runnable {
 
 		// print complete message
 		LOGGER.info("Finished processing (" + file.getName() + ")");
-	}
-
-	/**
-	 * Method parseContent
-	 * 
-	 * @param file
-	 * @param doc
-	 */
-	private void parseContent(File file, Document doc) {
-
-		// declaration
-		JavaParser parser = null;
-		ParseTree tree = null;
-		ParseTreeWalker walker = null;
-
-		try {
-			parser = new JavaParser(new CommonTokenStream(
-					 	new JavaLexer(new ANTLRInputStream(new FileInputStream(file)))));
-			tree = parser.compilationUnit();
-			walker = new ParseTreeWalker();
-			
-			// debug: print tree
-			System.out.println(tree.toStringTree(parser));
-			
-			// process tree
-			JavaFileListener extractor = new JavaFileListener(parser, doc);
-			walker.walk(extractor, tree);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

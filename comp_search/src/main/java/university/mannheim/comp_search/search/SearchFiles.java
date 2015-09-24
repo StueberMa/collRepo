@@ -25,7 +25,7 @@ public class SearchFiles {
 
 	// constants
 	private static final String INDEX_PATH = System.getProperty("user.dir") + "/../index";
-	private static final String SEARCH_FIELD = "content";
+	private static final String SEARCH_FIELD = "file_content";
 	private static final int NUM_RESULTS = 50;
 
 	/**
@@ -56,6 +56,14 @@ public class SearchFiles {
 
 		// initialize query input
 		in = new BufferedReader(new InputStreamReader(System.in));
+		
+		// print infos
+		System.out.println("Fields: file_name, file_type, file_content (default)");
+		System.out.println("Syntax:" 
+				+ "\tfile_type:\"java\" AND Vehicle\t– Complex Search\n"
+				+ "\tVe??cle\t\t\t\t- Wildcard Search\n"
+				+ "\tVehikle~0.5\t\t\t– Fuzzy Searches\n"
+				+ "\t\"void String[]\"~5\t\t- Proximity Searches");
 
 		while (true) {
 
