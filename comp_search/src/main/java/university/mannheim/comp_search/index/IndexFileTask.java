@@ -51,6 +51,8 @@ public class IndexFileTask implements Runnable {
 	@Override
 	public void run() {
 
+		// TODO: all strings to lowercase
+		
 		// declaration
 		JavaParser parser = null;
 		ParseTree tree = null;
