@@ -9,29 +9,39 @@ sap.ui.controller("personslist-web.personslist", {
 	 * @memberOf personslist-web.personslist
 	 */
 	onInit : function() {
-		var oPersonsModel = new sap.ui.model.json.JSONModel();
-		
-		oPersonsModel.setData({
-			Persons : [ {
-				FirstName : "",
-				LastName : ""
-			} ]
-		});
-		this.getView().setModel(oPersonsModel);
+		var sOrigin = window.location.protocol + "//"
+				+ window.location.hostname
+				+ (window.location.port ? ":" + window.location.port : "");
+
+		var personsListOdataServiceUrl = sOrigin
+				+ "/personslist-web/personslist.svc";
+
+		var odataModel = new sap.ui.model.odata.ODataModel(
+				personsListOdataServiceUrl);
+
+		odataModel.setCountSupported(false);
+		this.getView().setModel(odataModel);
+	},
+
+	addNewPerson : function(sFirstName, sLastName, oTable) {
+		var persons = {};
+
+		persons.FirstName = sFirstName;
+		persons.LastName = sLastName;
+
+		this.getView().getModel().create("/Persons", persons, null,
+				this.successMsg, this.errorMsg);
+	},
+
+	successMsg : function() {
+		sap.ui.commons.MessageBox
+				.alert("Person entity has been successfully created");
 	},
 	
-	addNewPerson : function(sFirstName, sLastName, oTable) {
-		var oPersonsModel = new sap.ui.model.json.JSONModel();
-		oPersonsModel.setData({
-			Persons : [ {
-				FirstName : sFirstName,
-				LastName : sLastName
-			} ]
-		});
-		
-		this.getView().setModel(oPersonsModel);
-		oTable.unbindRows().bindRows("/Persons");
-	}
+	errorMsg : function() {
+		sap.ui.commons.MessageBox
+				.alert("Error occured when creating person entity");
+	},
 
 /**
  * Similar to onAfterRendering, but this hook is invoked before the controller's

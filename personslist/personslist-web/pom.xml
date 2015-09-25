@@ -3,20 +3,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>personslist-web</artifactId>
 	<packaging>war</packaging>
-	
+
 	<parent>
 		<groupId>com.sap.hana.cloud.sample</groupId>
 		<artifactId>personslist</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>com.sap.hana.cloud.sample</groupId>
 			<artifactId>personslist-model-jpa</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+
 		<!-- SAP HANA Cloud SDK dependencies -->
 		<dependency>
 			<groupId>com.sap.cloud</groupId>
@@ -48,7 +48,45 @@
 			<version>1.7.2</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- Olingo OData dependencies -->
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-api</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-core</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-jpa-processor-api</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-api-annotation</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-jpa-processor-core</artifactId>
+			<version>1.2.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+			<version>2.7.5</version>
+		</dependency>
 	</dependencies>
+	
 	<build>
 		<finalName>${project.artifactId}</finalName>
 	</build>
