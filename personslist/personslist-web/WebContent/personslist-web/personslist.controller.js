@@ -1,4 +1,4 @@
-sap.ui.controller("personslist-web.personslist-web", {
+sap.ui.controller("personslist-web.personslist", {
 
 	/**
 	 * Called when a controller is instantiated and its View controls (if
@@ -6,7 +6,7 @@ sap.ui.controller("personslist-web.personslist-web", {
 	 * is displayed, to bind event handlers and do other one-time
 	 * initialization.
 	 * 
-	 * @memberOf personslist-web.personslist-web
+	 * @memberOf personslist-web.personslist
 	 */
 	onInit : function() {
 		var oPersonsModel = new sap.ui.model.json.JSONModel();
@@ -38,7 +38,7 @@ sap.ui.controller("personslist-web.personslist-web", {
  * View is re-rendered (NOT before the first rendering! onInit() is used for
  * that one!).
  * 
- * @memberOf personslist-web.personslist-web
+ * @memberOf personslist-web.personslist
  */
 // onBeforeRendering: function() {
 //
@@ -48,7 +48,7 @@ sap.ui.controller("personslist-web.personslist-web", {
  * Post-rendering manipulations of the HTML could be done here. This hook is the
  * same one that SAPUI5 controls get after being rendered.
  * 
- * @memberOf personslist-web.personslist-web
+ * @memberOf personslist-web.personslist
  */
 // onAfterRendering: function() {
 //
@@ -57,7 +57,7 @@ sap.ui.controller("personslist-web.personslist-web", {
  * Called when the Controller is destroyed. Use this one to free resources and
  * finalize activities.
  * 
- * @memberOf personslist-web.personslist-web
+ * @memberOf personslist-web.personslist
  */
 // onExit: function() {
 //
