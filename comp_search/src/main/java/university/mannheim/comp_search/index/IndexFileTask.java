@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -98,7 +97,7 @@ public class IndexFileTask implements Runnable {
 			
 			// add comments
 			for(int i = 0; i < parser.getTokenStream().size(); i++) {
-				if(parser.getTokenStream().get(i).getChannel() == JavaLexer.COMMENTS)
+				if(parser.getTokenStream().get(i).getChannel() == JavaLexer.COMMENTS_CHANNEL)
 					value = value + parser.getTokenStream().get(i).getText();
 			}
 			

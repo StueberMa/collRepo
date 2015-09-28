@@ -29,8 +29,8 @@
 grammar Java;
 
 @lexer::members {
-    public static final int WHITESPACE = 2;
-    public static final int COMMENTS = 3;
+    public static final int WHITESPACE_CHANNEL = 2;
+    public static final int COMMENTS_CHANNEL = 3;
 }
 
 // starting point for parsing a java file
@@ -1001,13 +1001,13 @@ ELLIPSIS : '...';
 // Whitespace and comments
 //
 
-WS  :  [ \t\r\n\u000C]+ -> channel(WHITESPACE)
+WS  :  [ \t\r\n\u000C]+ -> channel(WHITESPACE_CHANNEL)
     ;
 
 COMMENT
-    :   '/*' .*? '*/' -> channel(COMMENTS)
+    :   '/*' .*? '*/' -> channel(COMMENTS_CHANNEL)
     ;
 
 LINE_COMMENT
-    :   '//' ~[\r\n]* -> channel(COMMENTS)
+    :   '//' ~[\r\n]* -> channel(COMMENTS_CHANNEL)
     ;
