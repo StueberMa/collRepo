@@ -5,13 +5,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,15 +54,13 @@ public class IndexFileTask implements Runnable {
 	@Override
 	public void run() {
 
-		// TODO: all strings to lowercase
-		
 		// declaration
 		JavaParser parser = null;
 		ParseTree tree = null;
 		ParseTreeWalker walker = null;
 		Document doc = null;
-		Field nameField = null;
-		Field typeField = null;
+		Field field = null;
+		String value = "";
 
 		// initialize
 		doc = new Document();
@@ -69,14 +70,16 @@ public class IndexFileTask implements Runnable {
 
 		try {
 			// add name
-			nameField = new StringField("file_name", file.getName(), Field.Store.YES);
-			doc.add(nameField);
+			value = file.getName().toLowerCase();
+			field = new StringField("name", value, Field.Store.YES);
+			doc.add(field);
 
 			// add type
-			typeField = new StringField("file_type", FilenameUtils.getExtension(file.getName()), Field.Store.YES);
-			doc.add(typeField);
+			value = FilenameUtils.getExtension(file.getName()).toLowerCase();
+			field = new StringField("language", value, Field.Store.YES);
+			doc.add(field);
 
-			// add actual content
+			// add declarations
 			try {
 				parser = new JavaParser(new CommonTokenStream(
 						 	new JavaLexer(new ANTLRInputStream(new FileInputStream(file)))));
@@ -84,7 +87,7 @@ public class IndexFileTask implements Runnable {
 				walker = new ParseTreeWalker();
 				
 				// debug: print tree
-				// System.out.println(tree.toStringTree(parser));
+				System.out.println(tree.toStringTree(parser));
 				
 				// process tree
 				JavaFileListener extractor = new JavaFileListener(parser, doc);
@@ -92,6 +95,18 @@ public class IndexFileTask implements Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			// add comments
+			for(int i = 0; i < parser.getTokenStream().size(); i++) {
+				if(parser.getTokenStream().get(i).getChannel() == JavaLexer.COMMENTS)
+					value = value + parser.getTokenStream().get(i).getText();
+			}
+			
+			value = StringUtils.removePattern(value, "(\\*|/)");
+			value = StringUtils.normalizeSpace(value);
+		
+			field = new TextField("comment", value, Field.Store.YES);
+			doc.add(field);
 
 			// add document
 			writer.addDocument(doc);

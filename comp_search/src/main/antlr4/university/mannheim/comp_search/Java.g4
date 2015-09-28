@@ -26,19 +26,12 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/** A Java 1.7 grammar for ANTLR v4 derived from ANTLR v3 Java grammar.
- *  Uses ANTLR v4's left-recursive expression notation.
- *  It parses ECJ, Netbeans, JDK etc...
- *
- *  Sam Harwell cleaned this up significantly and updated to 1.7!
- *
- *  You can test with
- *
- *  $ antlr4 Java.g4
- *  $ javac *.java
- *  $ grun Java compilationUnit *.java
- */
 grammar Java;
+
+@lexer::members {
+    public static final int WHITESPACE = 2;
+    public static final int COMMENTS = 3;
+}
 
 // starting point for parsing a java file
 compilationUnit
@@ -1008,13 +1001,13 @@ ELLIPSIS : '...';
 // Whitespace and comments
 //
 
-WS  :  [ \t\r\n\u000C]+ -> skip
+WS  :  [ \t\r\n\u000C]+ -> channel(WHITESPACE)
     ;
 
 COMMENT
-    :   '/*' .*? '*/' -> skip
+    :   '/*' .*? '*/' -> channel(COMMENTS)
     ;
 
 LINE_COMMENT
-    :   '//' ~[\r\n]* -> skip
+    :   '//' ~[\r\n]* -> channel(COMMENTS)
     ;

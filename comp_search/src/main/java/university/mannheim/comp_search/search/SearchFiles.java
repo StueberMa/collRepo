@@ -8,6 +8,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -25,7 +26,7 @@ public class SearchFiles {
 
 	// constants
 	private static final String INDEX_PATH = System.getProperty("user.dir") + "/../index";
-	private static final String SEARCH_FIELD = "file_content";
+	private static final String SEARCH_FIELD = "declaration";
 	private static final int NUM_RESULTS = 50;
 
 	/**
@@ -58,9 +59,9 @@ public class SearchFiles {
 		in = new BufferedReader(new InputStreamReader(System.in));
 		
 		// print infos
-		System.out.println("Fields: file_name, file_type, file_content (default)");
+		System.out.println("Fields: name, language, declaration (default), body, comment");
 		System.out.println("Syntax:" 
-				+ "\tfile_type:\"java\" AND Vehicle\t– Complex Search\n"
+				+ "\tlanguage:\"java\" AND Vehicle\t– Complex Search\n"
 				+ "\tVe??cle\t\t\t\t- Wildcard Search\n"
 				+ "\tVehikle~0.5\t\t\t– Fuzzy Searches\n"
 				+ "\t\"void String[]\"~5\t\t- Proximity Searches");
@@ -78,21 +79,26 @@ public class SearchFiles {
 			}
 
 			// parse query
-			query = parser.parse(queryString);
-			System.out.println("\nSearching for: " + query.toString(SEARCH_FIELD));
-
-			// search for results
-			searcher.search(query, NUM_RESULTS);
-			results = searcher.search(query, NUM_RESULTS);
-			hits = results.scoreDocs;
-
-			// print results
-			System.out.println(results.totalHits + " total matching documents");
-
-			for (int i = 0; i < hits.length; i++) {
-				doc = searcher.doc(hits[i].doc);
-				System.out.println((i + 1) + ". " + doc.get("file_name"));
+			try {
+				query = parser.parse(queryString);
+				System.out.println("\nSearching for: " + query.toString(SEARCH_FIELD));
+	
+				// search for results
+				searcher.search(query, NUM_RESULTS);
+				results = searcher.search(query, NUM_RESULTS);
+				hits = results.scoreDocs;
+	
+				// print results
+				System.out.println(results.totalHits + " total matching documents");
+	
+				for (int i = 0; i < hits.length; i++) {
+					doc = searcher.doc(hits[i].doc);
+					System.out.println((i + 1) + ". " + doc.get("name"));
+				}
+			} catch (ParseException e) {
+				System.out.println("Error: Not able to parse query. Please try again.");
 			}
+			
 		}
 
 		// close
