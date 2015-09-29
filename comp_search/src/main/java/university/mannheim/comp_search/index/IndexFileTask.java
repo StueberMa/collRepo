@@ -96,7 +96,7 @@ public class IndexFileTask implements Runnable {
 			
 			value = StringUtils.removePattern(value, "(\\*|/)");
 			value = StringUtils.normalizeSpace(value);
-			writer.addField(ConstantsHelper.FIELD_COMMENT, ConstantsHelper.TYPE_STRING, value);
+			writer.addField(ConstantsHelper.FIELD_COMMENT, ConstantsHelper.TYPE_TEXT, value);
 			
 			// flush to index
 			writer.flush();
