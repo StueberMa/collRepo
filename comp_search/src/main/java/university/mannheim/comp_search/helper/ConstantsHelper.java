@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 
+import university.mannheim.comp_search.index.JavaAnalyzer;
+
 /**
  * Class for Constants.
  * 

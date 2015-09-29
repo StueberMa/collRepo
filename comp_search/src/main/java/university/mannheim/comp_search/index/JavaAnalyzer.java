@@ -1,4 +1,4 @@
-package university.mannheim.comp_search.helper;
+package university.mannheim.comp_search.index;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
