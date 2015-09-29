@@ -2,11 +2,6 @@ package university.mannheim.comp_search.index;
 
 import java.util.List;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.TextField;
-
-import university.mannheim.comp_search.JavaParser.VariableDeclaratorIdContext;
 import university.mannheim.comp_search.JavaBaseListener;
 import university.mannheim.comp_search.JavaParser;
 import university.mannheim.comp_search.JavaParser.ClassOrInterfaceModifierContext;
@@ -21,6 +16,9 @@ import university.mannheim.comp_search.JavaParser.PackageDeclarationContext;
 import university.mannheim.comp_search.JavaParser.QualifiedNameContext;
 import university.mannheim.comp_search.JavaParser.TypeContext;
 import university.mannheim.comp_search.JavaParser.TypeListContext;
+import university.mannheim.comp_search.JavaParser.VariableDeclaratorIdContext;
+import university.mannheim.comp_search.helper.ConstantsHelper;
+import university.mannheim.comp_search.helper.IndexFileHelper;
 
 /**
  * Listener for parsed java files.
@@ -32,16 +30,17 @@ public class JavaFileListener extends JavaBaseListener {
 
 	// attributes
 	private JavaParser parser;
-	private Document doc;
+	private IndexFileHelper writer;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param parser
+	 * @param writer
 	 */
-	public JavaFileListener(JavaParser parser, Document doc) {
+	public JavaFileListener(JavaParser parser, IndexFileHelper writer) {
 		this.parser = parser;
-		this.doc = doc;
+		this.writer = writer;
 	}
 
 	/**
@@ -76,7 +75,7 @@ public class JavaFileListener extends JavaBaseListener {
 		}
 
 		// add to doc.
-		addContent(content);
+		writer.addField(ConstantsHelper.FIELD_DECLARATION, ConstantsHelper.TYPE_TEXT, content);
 	}
 
 	/**
@@ -112,7 +111,7 @@ public class JavaFileListener extends JavaBaseListener {
 		content = content + ")";
 
 		// add to doc.
-		addContent(content);
+		writer.addField(ConstantsHelper.FIELD_DECLARATION, ConstantsHelper.TYPE_TEXT, content);
 	}
 
 	/**
@@ -130,7 +129,7 @@ public class JavaFileListener extends JavaBaseListener {
 		content = "import " + ctx.getRuleContext(QualifiedNameContext.class, 0).getText();
 
 		// add to doc.
-		addContent(content);
+		writer.addField(ConstantsHelper.FIELD_DECLARATION, ConstantsHelper.TYPE_TEXT, content);
 	}
 
 	/**
@@ -157,7 +156,7 @@ public class JavaFileListener extends JavaBaseListener {
 		}
 
 		// add to doc.
-		addContent(content);
+		writer.addField(ConstantsHelper.FIELD_DECLARATION, ConstantsHelper.TYPE_TEXT, content);
 	}
 
 	/**
@@ -200,7 +199,7 @@ public class JavaFileListener extends JavaBaseListener {
 		content = content + ")";
 
 		// add to doc.
-		addContent(content);
+		writer.addField(ConstantsHelper.FIELD_DECLARATION, ConstantsHelper.TYPE_TEXT, content);
 	}
 
 	/**
@@ -243,7 +242,7 @@ public class JavaFileListener extends JavaBaseListener {
 		content = content + ")";
 
 		// add to doc.
-		addContent(content);
+		writer.addField(ConstantsHelper.FIELD_DECLARATION, ConstantsHelper.TYPE_TEXT, content);
 	}
 
 	/**
@@ -265,21 +264,6 @@ public class JavaFileListener extends JavaBaseListener {
 		content = "package " + ctx.getRuleContext(QualifiedNameContext.class, 0).getText();
 
 		// add to doc.
-		addContent(content);
-	}
-
-	/**
-	 * Method addContent
-	 * 
-	 * @param text
-	 */
-	private void addContent(String text) {
-
-		// declaration
-		TextField textField = null;
-
-		// add (actual) content
-		textField = new TextField("declaration", text, Store.NO);
-		doc.add(textField);
+		writer.addField(ConstantsHelper.FIELD_DECLARATION, ConstantsHelper.TYPE_TEXT, content);
 	}
 }

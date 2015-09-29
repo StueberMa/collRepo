@@ -10,16 +10,13 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.IndexWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import university.mannheim.comp_search.JavaLexer;
 import university.mannheim.comp_search.JavaParser;
+import university.mannheim.comp_search.helper.ConstantsHelper;
+import university.mannheim.comp_search.helper.IndexFileHelper;
 
 /**
  * Index single text file.
@@ -31,7 +28,6 @@ public class IndexFileTask implements Runnable {
 
 	// attributes
 	private File file;
-	private IndexWriter writer;
 
 	// constants
 	private static final Logger LOGGER = LoggerFactory.getLogger(IndexFileTask.class.getSimpleName());
@@ -40,11 +36,9 @@ public class IndexFileTask implements Runnable {
 	 * Constructor
 	 * 
 	 * @param file
-	 * @param writer
 	 */
-	public IndexFileTask(File file, IndexWriter writer) {
+	public IndexFileTask(File file) {
 		this.file = file;
-		this.writer = writer;
 	}
 
 	/**
@@ -54,15 +48,16 @@ public class IndexFileTask implements Runnable {
 	public void run() {
 
 		// declaration
+		IndexFileHelper writer = null;
+		String value = "";
+		
+		JavaFileListener extractor = null;
 		JavaParser parser = null;
 		ParseTree tree = null;
 		ParseTreeWalker walker = null;
-		Document doc = null;
-		Field field = null;
-		String value = "";
-
+	
 		// initialize
-		doc = new Document();
+		writer = new IndexFileHelper();
 
 		// print start message
 		LOGGER.info("Start processing (" + file.getName() + ")");
@@ -70,13 +65,11 @@ public class IndexFileTask implements Runnable {
 		try {
 			// add name
 			value = file.getName().toLowerCase();
-			field = new StringField("name", value, Field.Store.YES);
-			doc.add(field);
+			writer.addField(ConstantsHelper.FIELD_NAME, ConstantsHelper.TYPE_STRING, value);
 
 			// add type
 			value = FilenameUtils.getExtension(file.getName()).toLowerCase();
-			field = new StringField("language", value, Field.Store.YES);
-			doc.add(field);
+			writer.addField(ConstantsHelper.FIELD_LANGUAGE, ConstantsHelper.TYPE_STRING, value);
 
 			// add declarations
 			try {
@@ -89,10 +82,10 @@ public class IndexFileTask implements Runnable {
 				System.out.println(tree.toStringTree(parser));
 				
 				// process tree
-				JavaFileListener extractor = new JavaFileListener(parser, doc);
+				extractor = new JavaFileListener(parser, writer);
 				walker.walk(extractor, tree);
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error("Internal Error: I/O issue");
 			}
 			
 			// add comments
@@ -103,12 +96,10 @@ public class IndexFileTask implements Runnable {
 			
 			value = StringUtils.removePattern(value, "(\\*|/)");
 			value = StringUtils.normalizeSpace(value);
-		
-			field = new TextField("comment", value, Field.Store.YES);
-			doc.add(field);
-
-			// add document
-			writer.addDocument(doc);
+			writer.addField(ConstantsHelper.FIELD_COMMENT, ConstantsHelper.TYPE_STRING, value);
+			
+			// flush to index
+			writer.flush();
 			
 		} catch (Exception e) {
 			LOGGER.error("Internal Error: I/O issue");

@@ -1,20 +1,11 @@
 package university.mannheim.comp_search.index;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,10 +19,8 @@ public class FileCrawler {
 
 	// constants
 	private static final int WORKERPOOL_SIZE = 10;
-	private static final int TIMEOUT_IN_MINUTES = 999;
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileCrawler.class.getSimpleName());
 	private static final String INPUT_PATH = System.getProperty("user.dir") + "/../data";
-	private static final String INDEX_PATH = System.getProperty("user.dir") + "/../index";
 	private static final String[] SUPP_TYPES = { "java" };
 
 	/**
@@ -45,21 +34,8 @@ public class FileCrawler {
 		// declaration
 		File directory = null;
 		File[] allFiles = null;
-		Directory dir = null;
-		Analyzer analyzer = null;
-		IndexWriterConfig iwc = null;
-		IndexWriter writer = null;
 		ExecutorService executor = null;
 		Runnable task = null;
-
-		// initialize indexer
-		dir = FSDirectory.open(Paths.get(INDEX_PATH));
-		analyzer = new StandardAnalyzer();
-
-		iwc = new IndexWriterConfig(analyzer);
-		iwc.setOpenMode(OpenMode.CREATE);
-
-		writer = new IndexWriter(dir, iwc);
 
 		// get files from directory
 		LOGGER.info("Scanning directory " + INPUT_PATH + " for files");
@@ -77,13 +53,11 @@ public class FileCrawler {
 				continue;
 
 			// call worker
-			task = new IndexFileTask(file, writer);
+			task = new IndexFileTask(file);
 			executor.submit(task);
 		}
 
 		// terminate
 		executor.shutdown();
-		executor.awaitTermination(TIMEOUT_IN_MINUTES, TimeUnit.MINUTES);
-		writer.close();
 	}
 }
