@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -35,11 +36,11 @@ public class SearchFileHelper {
 	/**
 	 * Constants
 	 */
-	public SearchFileHelper() {
-
+	private SearchFileHelper() {
+		
 		try {
 			searcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(Paths.get(ConstantsHelper.INDEX_PATH))));
-			parser = new QueryParser(ConstantsHelper.FIELD_DECLARATION, new StandardAnalyzer());
+			parser = new QueryParser(ConstantsHelper.FIELD_DECLARATION, new PerFieldAnalyzerWrapper(new StandardAnalyzer(), ConstantsHelper.ANALYZER_PER_FIELD));
 		} catch (IOException e) {
 			LOGGER.error("Internal Error: I/O issue");
 		}
@@ -62,16 +63,12 @@ public class SearchFileHelper {
 		// initialize
 		results = new ArrayList<Document>();
 
-		// parse query
 		try {
+			// parse query
 			query = parser.parse(queryString);
 			System.out.println("\nSearching for: " + query.toString(ConstantsHelper.FIELD_DECLARATION));
-		} catch (ParseException e) {
-			LOGGER.error("Internal Error: Not able to parse query");
-		}
-
-		// search for results
-		try {
+			
+			// search for results
 			searcher.search(query, ConstantsHelper.NUM_RESULTS);
 			hits = searcher.search(query, ConstantsHelper.NUM_RESULTS).scoreDocs;
 
@@ -79,12 +76,24 @@ public class SearchFileHelper {
 			for (int i = 0; i < hits.length; i++) {
 				results.add(searcher.doc(hits[i].doc));
 			}
-
+			
+		} catch (ParseException e) {
+			LOGGER.error("Internal Error: Not able to parse query");
 		} catch (IOException e) {
 			LOGGER.error("Internal Error: I/O issue");
 		}
 
 		return results;
+	}
+	
+	/**
+	 * Method getSearchFileHelper
+	 * 
+	 * @return
+	 */
+	public synchronized static SearchFileHelper getSearchFileHelper() {
+		
+		return new SearchFileHelper();
 	}
 
 }

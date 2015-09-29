@@ -57,7 +57,7 @@ public class IndexFileTask implements Runnable {
 		ParseTreeWalker walker = null;
 	
 		// initialize
-		writer = new IndexFileHelper();
+		writer = IndexFileHelper.getIndexFileHelper();
 
 		// print start message
 		LOGGER.info("Start processing (" + file.getName() + ")");

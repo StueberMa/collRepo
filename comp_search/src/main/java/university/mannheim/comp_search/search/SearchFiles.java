@@ -34,7 +34,7 @@ public class SearchFiles {
 
 		// initalize index
 		System.out.println("**** Application start up ****");
-		searcher = new SearchFileHelper();
+		searcher = SearchFileHelper.getSearchFileHelper();
 
 		// initialize query input
 		in = new BufferedReader(new InputStreamReader(System.in));
@@ -59,6 +59,10 @@ public class SearchFiles {
 
 			// parse query
 			results = searcher.executeQuery(query);
+			
+			// ensure: not null
+			if(results == null)
+				continue;
 
 			// output result
 			System.out.println(results.size() + " total matching documents");
