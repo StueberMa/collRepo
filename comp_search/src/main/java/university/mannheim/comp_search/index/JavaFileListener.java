@@ -6,6 +6,7 @@ import university.mannheim.comp_search.JavaBaseListener;
 import university.mannheim.comp_search.JavaParser;
 import university.mannheim.comp_search.JavaParser.ClassOrInterfaceModifierContext;
 import university.mannheim.comp_search.JavaParser.ConstructorDeclarationContext;
+import university.mannheim.comp_search.JavaParser.FieldDeclarationContext;
 import university.mannheim.comp_search.JavaParser.FormalParameterContext;
 import university.mannheim.comp_search.JavaParser.FormalParameterListContext;
 import university.mannheim.comp_search.JavaParser.FormalParametersContext;
@@ -14,9 +15,11 @@ import university.mannheim.comp_search.JavaParser.InterfaceDeclarationContext;
 import university.mannheim.comp_search.JavaParser.InterfaceMethodDeclarationContext;
 import university.mannheim.comp_search.JavaParser.PackageDeclarationContext;
 import university.mannheim.comp_search.JavaParser.QualifiedNameContext;
+import university.mannheim.comp_search.JavaParser.StatementExpressionContext;
 import university.mannheim.comp_search.JavaParser.TypeContext;
 import university.mannheim.comp_search.JavaParser.TypeListContext;
 import university.mannheim.comp_search.JavaParser.VariableDeclaratorIdContext;
+import university.mannheim.comp_search.JavaParser.VariableDeclaratorsContext;
 import university.mannheim.comp_search.helper.ConstantsHelper;
 import university.mannheim.comp_search.helper.IndexFileHelper;
 
@@ -104,11 +107,32 @@ public class JavaFileListener extends JavaBaseListener {
 				content = content + param.getRuleContext(TypeContext.class, 0).getText() + " "
 						+ param.getRuleContext(VariableDeclaratorIdContext.class, 0).getText() + ", ";
 			}
-			
+
 			content = content.substring(0, content.length() - 2);
 		}
 
 		content = content + ")";
+
+		// add to doc.
+		writer.addField(ConstantsHelper.FIELD_DECLARATION, ConstantsHelper.TYPE_TEXT, content);
+	}
+
+	/**
+	 * Method enterFieldDeclaration
+	 * 
+	 * @param ctx
+	 */
+	@Override
+	public void enterFieldDeclaration(FieldDeclarationContext ctx) {
+
+		// declaration
+		String content = "";
+
+		// consider: type
+		content = ctx.getRuleContext(TypeContext.class, 0).getText();
+
+		// consider: identifier
+		content = content + " " + ctx.getRuleContext(VariableDeclaratorsContext.class, 0).getText();
 
 		// add to doc.
 		writer.addField(ConstantsHelper.FIELD_DECLARATION, ConstantsHelper.TYPE_TEXT, content);
@@ -160,6 +184,44 @@ public class JavaFileListener extends JavaBaseListener {
 	}
 
 	/**
+	 * Method enterLocalVariableDeclaration
+	 * 
+	 * @param ctx
+	 */
+//	@Override
+//	public void enterLocalVariableDeclaration(LocalVariableDeclarationContext ctx) {
+//
+//		// declaration
+//		String content = "";
+//		List<VariableDeclaratorContext> variableDeclarators = null;
+//
+//		// consider: type
+//		content = ctx.getRuleContext(TypeContext.class, 0).getText();
+//
+//		// consider: identifier
+//		variableDeclarators = ctx.getRuleContext(VariableDeclaratorsContext.class, 0).getRuleContexts(VariableDeclaratorContext.class);
+//		for(VariableDeclaratorContext varCtx : variableDeclarators) {
+//			content = content + " " + varCtx.getRuleContext(VariableDeclaratorIdContext.class, 0).getText();
+//		}
+//
+//		// add to doc.
+//		writer.addField(ConstantsHelper.FIELD_BODY, ConstantsHelper.TYPE_TEXT, content);
+//	}
+
+	/**
+	 * Method enterStatementExpression
+	 * 
+	 * @param ctx
+	 */
+	@Override
+	public void enterStatementExpression(StatementExpressionContext ctx) {
+
+		// add to doc.
+		writer.addField(ConstantsHelper.FIELD_BODY, ConstantsHelper.TYPE_TEXT, ctx.getText());
+		
+	}
+
+	/**
 	 * Method enterMethodDeclaration
 	 * 
 	 * @param ctx
@@ -192,9 +254,9 @@ public class JavaFileListener extends JavaBaseListener {
 				content = content + param.getRuleContext(TypeContext.class, 0).getText() + " "
 						+ param.getRuleContext(VariableDeclaratorIdContext.class, 0).getText() + ", ";
 			}
-			
+
 			content = content.substring(0, content.length() - 2);
-		} 
+		}
 
 		content = content + ")";
 
@@ -235,7 +297,7 @@ public class JavaFileListener extends JavaBaseListener {
 				content = content + param.getRuleContext(TypeContext.class, 0).getText() + " "
 						+ param.getRuleContext(VariableDeclaratorIdContext.class, 0).getText() + ", ";
 			}
-			
+
 			content = content.substring(0, content.length() - 2);
 		}
 
