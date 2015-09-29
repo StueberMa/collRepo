@@ -79,7 +79,7 @@ public class IndexFileTask implements Runnable {
 				walker = new ParseTreeWalker();
 				
 				// debug: print tree
-				System.out.println(tree.toStringTree(parser));
+				// System.out.println(tree.toStringTree(parser));
 				
 				// process tree
 				extractor = new JavaFileListener(parser, writer);

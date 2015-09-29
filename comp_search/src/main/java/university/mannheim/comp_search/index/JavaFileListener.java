@@ -184,31 +184,6 @@ public class JavaFileListener extends JavaBaseListener {
 	}
 
 	/**
-	 * Method enterLocalVariableDeclaration
-	 * 
-	 * @param ctx
-	 */
-//	@Override
-//	public void enterLocalVariableDeclaration(LocalVariableDeclarationContext ctx) {
-//
-//		// declaration
-//		String content = "";
-//		List<VariableDeclaratorContext> variableDeclarators = null;
-//
-//		// consider: type
-//		content = ctx.getRuleContext(TypeContext.class, 0).getText();
-//
-//		// consider: identifier
-//		variableDeclarators = ctx.getRuleContext(VariableDeclaratorsContext.class, 0).getRuleContexts(VariableDeclaratorContext.class);
-//		for(VariableDeclaratorContext varCtx : variableDeclarators) {
-//			content = content + " " + varCtx.getRuleContext(VariableDeclaratorIdContext.class, 0).getText();
-//		}
-//
-//		// add to doc.
-//		writer.addField(ConstantsHelper.FIELD_BODY, ConstantsHelper.TYPE_TEXT, content);
-//	}
-
-	/**
 	 * Method enterStatementExpression
 	 * 
 	 * @param ctx
@@ -218,7 +193,7 @@ public class JavaFileListener extends JavaBaseListener {
 
 		// add to doc.
 		writer.addField(ConstantsHelper.FIELD_BODY, ConstantsHelper.TYPE_TEXT, ctx.getText());
-		
+
 	}
 
 	/**
