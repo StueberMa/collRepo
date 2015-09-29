@@ -94,6 +94,7 @@ public class IndexFileHelper {
 	 * Method flush
 	 */
 	public void flush() {
+		
 		try {
 			writer.addDocument(doc);
 			writer.commit();
@@ -108,7 +109,7 @@ public class IndexFileHelper {
 	 * @return
 	 */
 	public synchronized static IndexFileHelper getIndexFileHelper() {
-
+		
 		return new IndexFileHelper();
 	}
 }

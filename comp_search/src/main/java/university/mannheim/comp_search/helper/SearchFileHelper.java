@@ -44,7 +44,6 @@ public class SearchFileHelper {
 		} catch (IOException e) {
 			LOGGER.error("Internal Error: I/O issue");
 		}
-
 	}
 
 	/**
