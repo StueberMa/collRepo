@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * Class for Apache Lucene Indexing.
  * 
  * @author Maximilian Stüber
- * @version 20.09.2015
+ * @version 29.09.2015
  */
 public class IndexFileHelper {
 
