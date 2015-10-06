@@ -1,11 +1,8 @@
-package university.mannheim.comp_search.index;
+package university.mannheim.sandbox;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-
-import university.mannheim.comp_search.SampleLexer;
-import university.mannheim.comp_search.SampleParser;
 
 /**
  * Sample.
