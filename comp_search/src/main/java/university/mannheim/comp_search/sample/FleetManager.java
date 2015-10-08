@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class FleetManager.
+ * Class to manage diverse vehicles.
  * 
  * @author Maximilian Stüber
  * @version 20.09.2015
@@ -25,7 +25,7 @@ public class FleetManager {
 		fleet = new ArrayList<Vehicle>();
 		
 		// create car fleet
-		fleet.add(new Car(5,4));
+		fleet.add(new Car(5, 4));
 		fleet.add(new Car(4, 4));
 		fleet.add(new Truck(2, 8));
 		fleet.add(new Bus(52, 12));

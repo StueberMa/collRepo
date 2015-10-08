@@ -24,7 +24,9 @@ public class Car implements Vehicle {
 	}
 	
 	/**
-	 * Method getNumOfSeats
+	 * Method to retrieve the number of seats.
+	 * 
+	 * @return
 	 */
 	@Override
 	public int getNumOfSeats() {
@@ -32,7 +34,9 @@ public class Car implements Vehicle {
 	}
 
 	/**
-	 * Method getNumOfWheels
+	 * Method to retrieve the number of wheels.
+	 * 
+	 * @return
 	 */
 	@Override
 	public int getNumOfWheels() {
@@ -40,7 +44,9 @@ public class Car implements Vehicle {
 	}
 
 	/**
-	 * Method getVehicleType
+	 * Method to retrieve the vehicle type.
+	 * 
+	 * @return
 	 */
 	@Override
 	public String getVehicleType() {
