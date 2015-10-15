@@ -219,9 +219,15 @@ public class JavaFileListener extends JavaBaseListener {
 	 */
 	@Override
 	public void enterStatementExpression(StatementExpressionContext ctx) {
-
+		
+		// declaration
+		String text = "";
+		
+		// get text
+		text = parser.getTokenStream().getText(ctx.getSourceInterval());
+		
 		// add to doc.
-		writer.addField(ConstantsHelper.FIELD_BODY, ConstantsHelper.TYPE_TEXT, ctx.getText());
+		writer.addField(ConstantsHelper.FIELD_BODY, ConstantsHelper.TYPE_TEXT, text);
 	}
 
 	/**

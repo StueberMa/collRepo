@@ -84,7 +84,7 @@ public class IndexFileHelper {
 				break;
 	
 			case ConstantsHelper.TYPE_TEXT:
-				field = new TextField(name, value, Field.Store.NO);
+				field = new TextField(name, value, Field.Store.YES);
 				doc.add(field);
 				break;
 		}
