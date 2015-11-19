@@ -99,7 +99,7 @@ public class IndexFileTask implements Runnable {
 			writer.addField(ConstantsHelper.FIELD_COMMENT, ConstantsHelper.TYPE_TEXT, value);
 			
 			// flush to index
-			writer.flush();
+			IndexFileHelper.flush(writer.getDoc());
 			
 		} catch (Exception e) {
 			LOGGER.error("Internal Error: I/O issue");

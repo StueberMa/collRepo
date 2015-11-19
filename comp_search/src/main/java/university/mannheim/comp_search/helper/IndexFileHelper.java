@@ -30,6 +30,7 @@ public class IndexFileHelper {
 
 	// singleton
 	private static IndexWriter writer;
+	private static int activeProcesses = 0;
 
 	// attributes
 	private Document doc;
@@ -45,9 +46,9 @@ public class IndexFileHelper {
 
 		// initialize: document
 		doc = new Document();
-
+		
 		// writer already initialized
-		if (writer != null)
+		if (writer != null && writer.isOpen())
 			return;
 
 		// initialize: writer
@@ -89,15 +90,30 @@ public class IndexFileHelper {
 				break;
 		}
 	}
+	
+	/**
+	 * Method getDoc
+	 * 
+	 * @return
+	 */
+	public Document getDoc() {
+		return doc;
+	}
 
 	/**
 	 * Method flush
 	 */
-	public void flush() {
+	public synchronized static void flush(Document doc) {
 		
 		try {
 			writer.addDocument(doc);
 			writer.commit();
+			activeProcesses--;
+			
+			// close writer
+			if(activeProcesses == 0)
+				writer.close();
+			
 		} catch (IOException e) {
 			LOGGER.error("Internal Error: I/O issue");
 		}
@@ -109,6 +125,9 @@ public class IndexFileHelper {
 	 * @return
 	 */
 	public synchronized static IndexFileHelper getIndexFileHelper() {
+		
+		// count active processes
+		activeProcesses++;
 		
 		return new IndexFileHelper();
 	}
