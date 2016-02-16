@@ -10,109 +10,22 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css" />
 	
 	<script type="text/javascript" src="assets/library/d3.v3.min.js"></script>
+	<script type="text/javascript" src="assets/js/boxplot.js"></script>
 </head>
 <body>
-	<p>Box Plot</p>
+	<h3>Fahrzeug Alter</h3>
 	<script>
-	
-		// initialize the dimensions
-		var margin = {top: 10, right: 10, bottom: 10, left: 10},
-			width = 800 - margin.left - margin.right,
-		    height = 100 - margin.top - margin.bottom,
-		    padding = 20,
-		    midline = (height - padding) / 2;
-
-		// load / set data
-		var minVal = -150,
-		    maxVal = 6000,
-		    lowerWhisker = -67,
-		    upperWhisker = 3403,
-		    q1Val = 312,
-		    q3Val = 1549,
-		    medianVal = 762;
+		var dimension = new Object();
+		dimension.lowerWhisker = -67;
+		dimension.upperWhisker = 3403;
+		dimension.q1Val = 312;
+		dimension.q3Val = 1549;
+		dimension.medianVal = 762;
 		
-		//initialize the x scale
-		var xScale = d3.scale.linear()
-					   .domain([minVal, maxVal])
-		               .range([padding, width - padding]);  
+		var points = [-150, 850, 1900, 3800];
 		
-		// compute iqr size
-		iqr = xScale(q3Val) - xScale(q1Val);
-		
-		// draw svg container
-		var svg = d3.select("body")
-          	.append("svg")
-          	.attr("class", "box")
-          	.attr("width", width)
-         	.attr("height", height);
-		
-		// draw box plot
-		// verical line for lowerWhisker
-		svg.append("line")
-		    .attr("x1", xScale(lowerWhisker))
-		    .attr("x2", xScale(lowerWhisker))
-		    .attr("y1", midline - 10)
-		    .attr("y2", midline + 10);
-		
-		svg.append("text")
-		    .attr("x", xScale(lowerWhisker))
-		    .attr("y", midline - 20)
-		    .attr("text-anchor", "middle")
-		    .text(lowerWhisker);
-
-		// vertical line for upperWhisker
-		svg.append("line")  
-		    .attr("x1", xScale(upperWhisker))
-		    .attr("x2", xScale(upperWhisker))
-		    .attr("y1", midline - 10)
-		    .attr("y2", midline + 10);
-		
-		svg.append("text")
-		    .attr("x", xScale(upperWhisker))
-		    .attr("y", midline - 20)
-		    .attr("text-anchor", "middle")
-		    .text(upperWhisker);
-		
-		// horizontal line from lowerWhisker to upperWhisker
-		svg.append("line")
-			.attr("class", "center")
-		    .attr("x1",  xScale(lowerWhisker))
-		    .attr("x2",  xScale(upperWhisker))
-		    .attr("y1", midline)
-		    .attr("y2", midline);
-		
-		// rect for iqr
-		svg.append("rect")    
-		    .attr("x", xScale(q1Val))
-		    .attr("y", midline - 10)
-		    .attr("width", iqr)
-		    .attr("height", 20);
-		
-		svg.append("text")
-		    .attr("x", xScale(q1Val))
-		    .attr("y", midline + 30)
-		    .attr("text-anchor", "middle")
-		    .text(q1Val);
-		
-		svg.append("text")
-		    .attr("x", xScale(q3Val))
-		    .attr("y", midline + 30)
-		    .attr("text-anchor", "middle")
-		    .text(q3Val);
-		
-		//draw vertical line at median
-		svg.append("line")
-		    .attr("x1", xScale(medianVal))
-		    .attr("x2", xScale(medianVal))
-		    .attr("y1", midline - 10)
-		    .attr("y2", midline + 10);
-		
-		svg.append("text")
-		    .attr("x", xScale(medianVal))
-		    .attr("y", midline - 20)
-		    .attr("text-anchor", "middle")
-		    .text(medianVal);
-		 
+		// draw boxplot
+		var boxplot = d3.boxplot(600, 75, dimension, points, true);
 	</script>
 </body>
 </html>

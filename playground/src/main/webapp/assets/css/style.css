@@ -2,36 +2,49 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.box {
+p {
+	margin: 0px;
+}
+
+h3 {
+	margin: 0px;
+	margin-top: 10px;
+}
+
+.boxplot {
   font: 10px sans-serif;
 }
 
-.box line,
-.box rect,
-.box circle {
+.boxplot line,
+.boxplot rect,
+.boxplot circle {
   fill: #fff;
   stroke: #000;
   stroke-width: 1.5px;
 }
 
-.center {
+.boxplot .center {
    stroke-dasharray: 3,3;
 }
 
-.axis path {
-    fill: none;
-    stroke: black;
-    stroke-width: 1px;
-    shape-rendering: crispEdges;
+.boxplot .outlier {
+	fill: #FB9A99;
+	opacity: 1;
+	stroke: #d57375;
 }
 
-.axis line {
-    fill: none;
-    stroke: black;
-    stroke-width: 1px;
-    shape-rendering: crispEdges;
+.boxplot .point {
+	fill: #B2DF8A;
+	opacity: 1;
+	stroke: #90c26a;
 }
 
-.axis text {    
-    font-size: 10px;
+div.tooltip {	
+    position: absolute;			
+    text-align: center;											
+    padding: 5px 10px 5px 10px;				
+    font: 12px sans-serif;		
+    background: #fff;	
+    border: 2px solid #ddd;		
+    opacity: 1;
 }
