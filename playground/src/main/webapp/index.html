@@ -14,36 +14,72 @@
 	<script type="text/javascript" src="assets/js/scatterplot.js"></script>
 </head>
 <body>
-	
-	<h3>IRIS scatterplot</h3>
-	<svg id="irisScatterPlot" width="600" height="400"></svg>
-	<script>
-		d3.tsv("assets/data/iris.tsv", function(error, data) {
-	
-		 	var names = new Object();
-		 	names.x = "sepalWidth";
-		 	names.y = "sepalLength";
-		 	names.color = "species";
-		  
-		 	var scatterplot = d3.scatterplot("irisScatterPlot", 600, 400, data, names);
-		});
-	</script>
-	
-	<h3>Vehicle Age (in days)</h3>
-	<svg id="ageBoxPlot" class="boxplot" width="600" height="75"></svg>
-	<script>
-		/* Boxplot */
-		var dimension = new Object();
-		dimension.lowerWhisker = -67;
-		dimension.upperWhisker = 3403;
-		dimension.q1Val = 312;
-		dimension.q3Val = 1549;
-		dimension.medianVal = 762;
-		
-		var points = [-150, 850, 1900, 3800];
-		
-		var boxplot = d3.boxplot("ageBoxPlot", 600, 75, dimension, points, true);
-	</script>
+	<div id="main">
+		<div id="left">
+			<h3>Warranty Claim</h3>
+			<svg id="irisScatterPlot" width="600" height="400"></svg>
+			<script>
+				d3.tsv("assets/data/iris.tsv", function(error, data) {
+			
+				 	var names = new Object();
+				 	names.x = "sepalWidth";
+				 	names.y = "sepalLength";
+				 	names.color = "species";
+				  
+				 	var scatterplot = d3.scatterplot("irisScatterPlot", 600, 400, data, names);
+				});
+			</script>
+		</div>
+		<div id="right">
+			<h3>Vehicle Age (in days)</h3>
+			<svg id="ageBoxPlot" class="boxplot" width="600" height="75"></svg>
+			<script>
+				/* Boxplot */
+				var dimension = new Object();
+				dimension.lowerWhisker = -67;
+				dimension.upperWhisker = 3403;
+				dimension.q1Val = 312;
+				dimension.q3Val = 1549;
+				dimension.medianVal = 762;
+				
+				var points = [1900];
+				
+				var boxplot = d3.boxplot("ageBoxPlot", 600, 75, dimension, points, true);
+			</script>
+			
+			<h3 class="chart">Mileage (in kilometers)</h3>
+			<svg id="mileageBoxPlot" class="boxplot" width="600" height="75"></svg>
+			<script>
+				/* Boxplot */
+				var dimension = new Object();
+				dimension.lowerWhisker = 0;
+				dimension.upperWhisker = 636635;
+				dimension.q1Val = 48027;
+				dimension.q3Val = 283481;
+				dimension.medianVal = 134211;
+				
+				var points = [-100];
+				
+				var boxplot = d3.boxplot("mileageBoxPlot", 600, 75, dimension, points, true);
+			</script>
+			
+			<h3 class="chart">Claim Costs (in Euro)</h3>
+			<svg id="costBoxPlot" class="boxplot" width="600" height="75"></svg>
+			<script>
+				/* Boxplot */
+				var dimension = new Object();
+				dimension.lowerWhisker = -354.51;
+				dimension.upperWhisker = 662.01;
+				dimension.q1Val = 26.62;
+				dimension.q3Val = 280.78;
+				dimension.medianVal = 110.19;
+				
+				var points = [800];
+				
+				var boxplot = d3.boxplot("costBoxPlot", 600, 75, dimension, points, true);
+			</script>
+		</div>
+	</div>
 </body>
 </html>
 

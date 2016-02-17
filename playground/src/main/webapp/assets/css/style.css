@@ -1,5 +1,7 @@
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0px;
+  padding: 0px;
 }
 
 p {
@@ -8,9 +10,28 @@ p {
 
 h3 {
 	margin: 0px;
-	margin-top: 10px;
 }
 
+/**
+ * Page elements
+ */
+ #main {
+ 	margin: 15px;
+ 	clear: both;
+ }
+ 
+#left {
+	float: left;
+	margin-right: 40px;
+}
+
+.chart {
+	margin-top: 25px;
+}
+
+/**
+ * D3 charts
+ */
 .boxplot {
   font: 10px sans-serif;
 }
@@ -43,11 +64,17 @@ div.tooltip {
     position: absolute;			
     text-align: center;											
     padding: 5px 10px 5px 10px;				
-    font: 12px sans-serif;		
+    font: 10px sans-serif;		
     background: #fff;	
     border: 2px solid #ddd;		
     opacity: 1;
 }
+
+.axis .tick,
+.axis .label {
+	font: 10px sans-serif;		
+}
+
 
 .axis path,
 .axis line {
@@ -56,6 +83,6 @@ div.tooltip {
   shape-rendering: crispEdges;
 }
 
-.dot {
-  stroke: #000;
+.legend text {
+	font: 10px sans-serif;		
 }
