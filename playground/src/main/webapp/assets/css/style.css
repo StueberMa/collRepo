@@ -18,7 +18,7 @@ h3 {
 .boxplot line,
 .boxplot rect,
 .boxplot circle {
-  fill: #fff;
+  fill: #dbd8de;
   stroke: #000;
   stroke-width: 1.5px;
 }
