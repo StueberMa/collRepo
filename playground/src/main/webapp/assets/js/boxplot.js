@@ -1,6 +1,6 @@
 (function() {
 	
-	d3.boxplot = function(width, height, stats, points, showLabels) {
+	d3.boxplot = function(id, width, height, stats, points, showLabels) {
 		
 		// declaration
 		var padding = 20,
@@ -29,12 +29,8 @@
 		// compute iqr size
 		var iqr = scale(stats.q3Val) - scale(stats.q1Val);
 		
-		// draw svg container
-		var svg = d3.select("body")
-          	.append("svg")
-          	.attr("class", "boxplot")
-          	.attr("width", width)
-         	.attr("height", height);
+		// get svg container
+		var svg = d3.select("#" + id);
 		
 		// draw box plot
 		// verical line for lowerWhisker

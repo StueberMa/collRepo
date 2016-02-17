@@ -48,3 +48,14 @@ div.tooltip {
     border: 2px solid #ddd;		
     opacity: 1;
 }
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}

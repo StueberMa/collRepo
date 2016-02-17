@@ -11,10 +11,28 @@
 	
 	<script type="text/javascript" src="assets/library/d3.v3.min.js"></script>
 	<script type="text/javascript" src="assets/js/boxplot.js"></script>
+	<script type="text/javascript" src="assets/js/scatterplot.js"></script>
 </head>
 <body>
-	<h3>Vehicle Age (in days)</h3>
+	
+	<h3>IRIS scatterplot</h3>
+	<svg id="irisScatterPlot" width="600" height="400"></svg>
 	<script>
+		d3.tsv("assets/data/iris.tsv", function(error, data) {
+	
+		 	var names = new Object();
+		 	names.x = "sepalWidth";
+		 	names.y = "sepalLength";
+		 	names.color = "species";
+		  
+		 	var scatterplot = d3.scatterplot("irisScatterPlot", 600, 400, data, names);
+		});
+	</script>
+	
+	<h3>Vehicle Age (in days)</h3>
+	<svg id="ageBoxPlot" class="boxplot" width="600" height="75"></svg>
+	<script>
+		/* Boxplot */
 		var dimension = new Object();
 		dimension.lowerWhisker = -67;
 		dimension.upperWhisker = 3403;
@@ -24,8 +42,7 @@
 		
 		var points = [-150, 850, 1900, 3800];
 		
-		// draw boxplot
-		var boxplot = d3.boxplot(600, 75, dimension, points, true);
+		var boxplot = d3.boxplot("ageBoxPlot", 600, 75, dimension, points, true);
 	</script>
 </body>
 </html>
