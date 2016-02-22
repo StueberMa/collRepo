@@ -74,9 +74,7 @@
 	      .text(name.y)
 	      
 	    // define tooltip
-	    var div = d3.select("body").append("div")	
-			.attr("class", "tooltip")				
-			.style("opacity", 0);
+	    var div = d3.select("#tooltip");
 	    
 		// draw points
 	    svg.selectAll(".dot")
@@ -88,10 +86,10 @@
 	      .attr("cy", function(d) { return yScale(d[name.y]); })
 	      .style("fill", function(d) { if(name.color) return color(d[name.color]); return "black"; })
 	      .on("mouseover", function(d) {		
-	            div.transition()		
+	    	  div.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-            div.html("x: " + d[name.x] + "<br>" + "y: " + d[name.y])
+	    	  div.html("x: " + d[name.x] + "<br>" + "y: " + d[name.y])
                 .style("left", (d3.event.pageX + 5) + "px")		
                 .style("top", (d3.event.pageY - 30) + "px");	
             })					

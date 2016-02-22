@@ -60,7 +60,7 @@ h3 {
 	stroke: #90c26a;
 }
 
-div.tooltip {	
+#tooltip {	
     position: absolute;			
     text-align: center;											
     padding: 5px 10px 5px 10px;				
